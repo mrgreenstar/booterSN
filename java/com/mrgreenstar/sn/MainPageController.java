@@ -46,8 +46,7 @@ public class MainPageController {
                                    Principal principal, ModelAndView model) {
         User user = userRepository.findById(userId);
         User owner = userRepository.findByEmail(principal.getName());
-        ArrayList<Post> posts = new ArrayList<>();
-        posts = postRepository.findPostsByUserId(user.getId());
+        ArrayList<Post> posts = postRepository.findPostsByUserId(user.getId());
         model.addObject("ownerId", owner.getId());
         model.addObject("viewId", Integer.toString(userId));
         model.addObject("fullName", user.getFirstName() + " " + user.getLastName());
@@ -61,14 +60,12 @@ public class MainPageController {
                                     @RequestParam String textPost,
                                     Principal principal,
                                     ModelAndView model) {
-        model.addObject("textPost", textPost);
         User owner = userRepository.findByEmail(principal.getName());
-        model.addObject("ownerId", owner.getId());
         Date date = new Date();
-        Post pst = new Post(date.toString(), textPost);
+        Post pst = new Post(date, textPost);
         pst.setUser(owner);
         postRepository.save(pst);
-        model.setViewName("main");
+        model.setViewName("redirect:/user_" + Integer.toString(owner.getId()));
         return model;
     }
 }

@@ -1,13 +1,15 @@
 package com.mrgreenstar.sn.Entity;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 @Table(name = "Post")
 public class Post {
     public Post() {}
 
-    public Post(String time, String content) {
+    public Post(Date time, String content) {
         this.time = time;
         this.content = content;
     }
@@ -21,7 +23,8 @@ public class Post {
     private User user;
 
     @Column(name = "time")
-    private String time;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
 
     @Column(name = "content")
     public String content;
@@ -42,12 +45,18 @@ public class Post {
         this.user = user;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
+    }
+
+    public String getTimeAsString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+        Date date = getTime();
+        return formatter.format(date);
     }
 
     public String getContent() {
