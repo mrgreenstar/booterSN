@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.ArrayList;
 
 public interface PostRepository extends CrudRepository<Post, Long> {
-    ArrayList<Post> findPostsByUserId(int userId);
+    ArrayList<Post> findPostsByUserId(Long userId);
 }

@@ -2,21 +2,15 @@ package com.mrgreenstar.sn.Entity;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 
 @Entity
 @Table(name = "Post")
 public class Post {
-    public Post() {}
-
-    public Post(Date time, String content) {
-        this.time = time;
-        this.content = content;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,11 +23,18 @@ public class Post {
     @Column(name = "content")
     public String content;
 
-    public Integer getId() {
+    public Post() {}
+
+    public Post(Date time, String content) {
+        this.time = time;
+        this.content = content;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -54,8 +55,16 @@ public class Post {
     }
 
     public String getTimeAsString() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+        SimpleDateFormat formatter;
+        Date currentTime = new Date();
         Date date = getTime();
+        long diff = currentTime.getTime() - date.getTime();
+        long diffDays = diff / (1000 * 60 * 60 * 24);
+        if (diffDays >= 7) {
+            formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+            return formatter.format(date);
+        }
+        formatter = new SimpleDateFormat("EEE, HH:mm");
         return formatter.format(date);
     }
 

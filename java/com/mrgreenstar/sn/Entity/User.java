@@ -9,7 +9,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "firstName")
     private String firstName;
@@ -36,6 +36,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Post> posts = new HashSet<>();
 
+    // Список пользователей, на которых подписан данный пользователь
+    @OneToMany(mappedBy = "user")
+    private Set<Subscriptions> subscriptions;
+
     public User() { }
 
     public User(String firstName, String lastName, String country,
@@ -48,11 +52,11 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,6 +66,10 @@ public class User {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public String getLastName() {
@@ -126,5 +134,13 @@ public class User {
 
     public Set<Post> getPosts() {
         return posts;
+    }
+
+    public void setSubscriptions(Set<Subscriptions> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public Set<Subscriptions> getSubscriptions() {
+        return subscriptions;
     }
 }

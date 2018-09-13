@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RegistrationController {
@@ -25,9 +26,10 @@ public class RegistrationController {
     @PostMapping("/registration")
     public ModelAndView regSuccess(@RequestParam String firstName, @RequestParam String lastName,
                                    @RequestParam String country, @RequestParam String email,
-                                   @RequestParam String password, ModelAndView model) {
+                                   @RequestParam String password, RedirectAttributes redirectAttributes,
+                                   ModelAndView model) {
         // Если пользователь уже существует
-        if (userRepository.findByEmail(email) != null) {
+        if (userRepository.findUserByEmail(email) != null) {
             model.addObject("error", "User already exists");
             model.setViewName("registration");
             return model;
@@ -40,6 +42,7 @@ public class RegistrationController {
         }
         user.setRole(usrRole);
         userRepository.save(user);
+        redirectAttributes.addFlashAttribute("status", "You have been successfully registered :)");
         model.setViewName("redirect:/login");
         return model;
     }

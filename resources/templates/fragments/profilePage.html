@@ -14,7 +14,11 @@
             <div class="col-md-auto">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-auto" th:text="${fullName}">
+                        <div class="col-md-auto" th:text="${fullName}"></div>
+                        <div th:if="${ownerId != viewId}">
+                            <form th:action="@{'/user_' + ${viewId}}" method="post">
+                                <button class="btn btn-primary" name="subscribe" type="submit">Subscribe</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -24,7 +28,7 @@
             <div class="col-md-6 mx-auto">
                 <form th:action="@{__${#httpServletRequest.requestURL}__}" method="post">
                     <textarea name="textPost" class="form-control" rows="3" placeholder="Write something;)"></textarea>
-                    <button class="btn btn-outline-warning" type="submit">Type it</button>
+                    <button class="btn btn-outline-warning" name="post" type="submit">Type it</button>
                 </form>
             </div>
         </div>
@@ -32,7 +36,8 @@
         <th:block th:each="post : ${posts}">
             <div class="row spaceBetweenRows">
                 <div class="col-md-4 border border-primary mx-auto">
-                    <p th:text="${post.getTimeAsString()} + ' ' + ${fullName}"></p>
+                    <p th:text="${post.getTimeAsString()}"></p>
+                    <a th:href="@{'/user_' + ${viewId}}" th:text="${fullName}"></a>
                     <p th:text="${post.getContent()}"></p>
                 </div>
             </div>
