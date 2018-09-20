@@ -13,10 +13,10 @@
     <div th:replace="fragments/NavigationBar :: NavigationBar"></div>
     <div class="container">
         <p>Список подписок:</p>
-        <th:block th:each="sub : ${subNames}">
+        <th:block th:each="sub : ${userSubs}">
             <div class="row">
                 <div class="col-md-6">
-                    <span th:text="${sub}"></span>
+                    <a th:href="@{'/user_' + ${sub.getId()}}" th:text="${sub.getFullName()}"></a>
                 </div>
             </div>
         </th:block>

@@ -14,9 +14,9 @@
             <div class="col-md-auto">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-auto" th:text="${fullName}"></div>
+                        <div class="col-md-auto" th:text="${user.getFullName()}"></div>
                         <div th:if="${ownerId != viewId}">
-                            <form th:action="@{'/user_' + ${viewId}}" method="post">
+                            <form th:action="@{'/user_' + ${ownerId}}" method="post">
                                 <button class="btn btn-primary" name="subscribe" type="submit">Subscribe</button>
                             </form>
                         </div>
@@ -37,7 +37,7 @@
             <div class="row spaceBetweenRows">
                 <div class="col-md-4 border border-primary mx-auto">
                     <p th:text="${post.getTimeAsString()}"></p>
-                    <a th:href="@{'/user_' + ${viewId}}" th:text="${fullName}"></a>
+                    <a th:href="@{'/user_' + ${post.getUser().getId()}}" th:text="${post.getUser().getFullName()}"></a>
                     <p th:text="${post.getContent()}"></p>
                 </div>
             </div>

@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 @Controller
 public class MainPageController {
@@ -51,10 +50,18 @@ public class MainPageController {
         User user = userRepository.findUserById(userId);
         User owner = userRepository.findUserByEmail(principal.getName());
         ArrayList<Post> posts = postRepository.findPostsByUserId(user.getId());
+        // Получение всех постов
+        Set<Subscriptions> subs = owner.getSubscriptions();
+        for (Subscriptions sub : subs) {
+            User s = userRepository.findUserById(sub.getSubId());
+            posts.addAll(s.getPosts());
+        }
+        // Сортировка по дате
+        SortedSet<Post> treeSet = new TreeSet<>(posts);
         model.addObject("ownerId", owner.getId());
         model.addObject("viewId", userId);
-        model.addObject("fullName", user.getFirstName() + " " + user.getLastName());
-        model.addObject("posts", posts);
+        model.addObject("user", user);
+        model.addObject("posts", treeSet);
         model.setViewName("main");
         return model;
     }
