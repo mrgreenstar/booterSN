@@ -16,8 +16,13 @@
                     <div class="row">
                         <div class="col-md-auto" th:text="${user.getFullName()}"></div>
                         <div th:if="${ownerId != viewId}">
-                            <form th:action="@{'/user_' + ${ownerId}}" method="post">
-                                <button class="btn btn-primary" name="subscribe" type="submit">Subscribe</button>
+                            <form th:action="@{'/user_' + ${viewId}}" method="post">
+                                <div th:if="${!isSubscribed}">
+                                    <button class="btn btn-primary" name="subscribe" type="submit">Subscribe</button>
+                                </div>
+                                <div th:unless="${!isSubscribed}">
+                                    <button class="btn btn-primary" name="unsubscribe" type="submit">Unsubscribe</button>
+                                </div>
                             </form>
                         </div>
                     </div>

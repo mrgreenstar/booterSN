@@ -47,6 +47,8 @@ public class MainPageController {
     @GetMapping("/user_{userId}")
     public ModelAndView getProfile(@PathVariable("userId") Long userId,
                                    Principal principal, ModelAndView model) {
+        // ownerId - id пользователя, который просматривает
+        // userId - id просматриваемого пользователя
         User user = userRepository.findUserById(userId);
         User owner = userRepository.findUserByEmail(principal.getName());
         ArrayList<Post> posts = postRepository.findPostsByUserId(user.getId());
@@ -62,22 +64,36 @@ public class MainPageController {
         model.addObject("viewId", userId);
         model.addObject("user", user);
         model.addObject("posts", treeSet);
+        // isSubscribed равно true, если владелец уже подписан на пользователя
+        boolean btnType = subscriptionsRepository.findSubscriptionsByUserAndSubId(owner, userId) != null;
+        model.addObject("isSubscribed", btnType);
         model.setViewName("main");
         return model;
     }
 
-    // Контроллер, отвечающий за оформление подписок. Нужно убрать "дублирование" подписок
+    // Контроллер, отвечающий за оформление подписок
     @PostMapping(value = "/user_{userId}", params = {"subscribe"})
     public ModelAndView subsProfile(@PathVariable("userId") Long userId,
                                     Principal principal, ModelAndView model) {
         // userId - id человека, на которого подписались
         User usr = userRepository.findUserByEmail(principal.getName());
-        Subscriptions subs = new Subscriptions(usr, userId);
-        subscriptionsRepository.save(subs);
+        Subscriptions s = subscriptionsRepository.findSubscriptionsByUserAndSubId(usr, userId);
+        if (!userId.equals(usr.getId()) && s == null) {
+            Subscriptions subs = new Subscriptions(usr, userId);
+            subscriptionsRepository.save(subs);
+        }
         model.setViewName("redirect:/user_" + userId);
         return model;
     }
-
+    // Контроллер, отвечающий за оформление отписок
+    @PostMapping(value = "/user_{userId}", params = {"unsubscribe"})
+    public ModelAndView unsubProfile(@PathVariable("userId") Long userId, Principal principal,
+                                     ModelAndView model) {
+        User usr = userRepository.findUserByEmail(principal.getName());
+        subscriptionsRepository.deleteSubscriptionsByUserAndSubId(usr.getId(), userId);
+        model.setViewName("redirect:/user_" + userId);
+        return model;
+    }
     // Контроллер, отвечающий за написание постов
     @PostMapping(value = "/user_{userId}", params = {"post"})
     public ModelAndView postProfile(@PathVariable("userId") Long userId,

@@ -20,9 +20,6 @@ public class UserSubscriptionsController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private SubscriptionsRepository subscriptionsRepository;
-
     @GetMapping("/subs")
     public ModelAndView page(Principal principal, ModelAndView model) {
         User usr = userRepository.findUserByEmail(principal.getName());
