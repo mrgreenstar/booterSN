@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-
 public interface SubscriptionsRepository extends CrudRepository<Subscriptions, Long> {
     Subscriptions findSubscriptionsByUserAndSubId(User usr, Long subId);
     @Modifying
