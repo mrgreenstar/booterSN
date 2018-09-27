@@ -71,7 +71,7 @@ public class MainPageController {
         return model;
     }
 
-    // Контроллер, отвечающий за оформление подписок
+    // Контроллер, отвечающий за оформление ПОДписок
     @PostMapping(value = "/user_{userId}", params = {"subscribe"})
     public ModelAndView subsProfile(@PathVariable("userId") Long userId,
                                     Principal principal, ModelAndView model) {
@@ -85,7 +85,7 @@ public class MainPageController {
         model.setViewName("redirect:/user_" + userId);
         return model;
     }
-    // Контроллер, отвечающий за оформление отписок
+    // Контроллер, отвечающий за оформление ОТписок
     @PostMapping(value = "/user_{userId}", params = {"unsubscribe"})
     public ModelAndView unsubProfile(@PathVariable("userId") Long userId, Principal principal,
                                      ModelAndView model) {

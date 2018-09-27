@@ -2,7 +2,6 @@ package com.mrgreenstar.sn;
 
 import com.mrgreenstar.sn.Entity.Subscriptions;
 import com.mrgreenstar.sn.Entity.User;
-import com.mrgreenstar.sn.repositories.SubscriptionsRepository;
 import com.mrgreenstar.sn.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,11 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-// Можно же сделать нормально, правда?)0
+// Контроллер, отвечающий за отображение списка подписок
 @Controller
 public class UserSubscriptionsController {
     @Autowired

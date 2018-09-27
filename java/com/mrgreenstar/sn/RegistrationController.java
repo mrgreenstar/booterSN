@@ -5,6 +5,8 @@ import com.mrgreenstar.sn.Entity.User;
 import com.mrgreenstar.sn.repositories.RoleRepository;
 import com.mrgreenstar.sn.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,7 +36,8 @@ public class RegistrationController {
             model.setViewName("registration");
             return model;
         }
-        User user = new User(firstName, lastName, country, email, password);
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = new User(firstName, lastName, country, email, encoder.encode(password));
         Role usrRole = roleRepository.findRoleByRoleName("USER");
         if (usrRole == null) {
             usrRole = new Role("USER");
