@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <title>Settings</title>
+</head>
+<body>
+    <div th:replace="fragments/NavigationBar :: NavigationBar"></div>
+    <div class="container">
+        <form th:action="@{/settings}" method="post">
+            <div class="row">
+                <div lass="col-md-6">
+                    <input type="text" name="firstName" th:value="${firstName}" placeholder="First name" required/>
+                </div>
+            </div>
+            <div class="row">
+                <div lass="col-md-6">
+                    <input type="text" name="lastName" th:value="${lastName}" placeholder="Last name" required/>
+                </div>
+            </div>
+            <div class="row">
+                <div lass="col-md-6">
+                    <input type="text" name="country" th:value="${country}" placeholder="Country" required/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary" type="submit">Save changes</button>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-info" th:text="${info}"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

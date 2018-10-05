@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .invalidateHttpSession(true);
         http
                 .authorizeRequests()
-                .antMatchers("/main", "/subs").access("hasRole('USER')");
+                .antMatchers("/main", "/subs", "/settings").access("hasRole('USER')");
     }
 
     @Bean

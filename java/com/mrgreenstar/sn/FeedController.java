@@ -5,9 +5,6 @@ import com.mrgreenstar.sn.Entity.Subscriptions;
 import com.mrgreenstar.sn.Entity.User;
 import com.mrgreenstar.sn.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,7 +13,7 @@ import java.security.Principal;
 import java.util.*;
 
 @Controller
-public class MainPageController {
+public class FeedController {
     @Autowired
     private UserRepository userRepository;
 
@@ -26,24 +23,6 @@ public class MainPageController {
     @Autowired
     private SubscriptionsRepository subscriptionsRepository;
 
-    @GetMapping({"/","/login"})
-    public String loginPage(Principal principal) {
-        // Для перенаправления уже залогинненого пользователи со страницы авторизации
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            User usr = userRepository.findUserByEmail(principal.getName());
-            return "redirect:/user_" + Long.toString(usr.getId());
-        }
-        return "login";
-    }
-
-    @GetMapping("/redirectToProfile")
-    public ModelAndView mainPage(Principal principal, ModelAndView model) {
-        User usr = userRepository.findUserByEmail(principal.getName());
-        model.setViewName("redirect:/user_" + Long.toString(usr.getId()));
-        return model;
-    }
-
     @GetMapping("/user_{userId}")
     public ModelAndView getProfile(@PathVariable("userId") Long userId,
                                    Principal principal, ModelAndView model) {
@@ -52,19 +31,21 @@ public class MainPageController {
         User user = userRepository.findUserById(userId);
         User owner = userRepository.findUserByEmail(principal.getName());
         ArrayList<Post> posts = postRepository.findPostsByUserId(user.getId());
-        // Получение всех постов
-        Set<Subscriptions> subs = owner.getSubscriptions();
-        for (Subscriptions sub : subs) {
-            User s = userRepository.findUserById(sub.getSubId());
-            posts.addAll(s.getPosts());
+        // Get all post
+        if (posts != null) {
+            Set<Subscriptions> subs = owner.getSubscriptions();
+            for (Subscriptions sub : subs) {
+                User s = userRepository.findUserById(sub.getSubId());
+                posts.addAll(s.getPosts());
+            }
+            // Sort posts by date
+            SortedSet<Post> treeSet = new TreeSet<>(posts);
+            model.addObject("posts", treeSet);
         }
-        // Сортировка по дате
-        SortedSet<Post> treeSet = new TreeSet<>(posts);
         model.addObject("ownerId", owner.getId());
         model.addObject("viewId", userId);
         model.addObject("user", user);
-        model.addObject("posts", treeSet);
-        // isSubscribed равно true, если владелец уже подписан на пользователя
+        // If owner is already subscribed on user(whose page he is looking) so isSubscribed = true
         boolean btnType = subscriptionsRepository.findSubscriptionsByUserAndSubId(owner, userId) != null;
         model.addObject("isSubscribed", btnType);
         model.setViewName("main");
@@ -94,7 +75,7 @@ public class MainPageController {
         model.setViewName("redirect:/user_" + userId);
         return model;
     }
-    // Контроллер, отвечающий за написание постов
+    // Controller for post messages function
     @PostMapping(value = "/user_{userId}", params = {"post"})
     public ModelAndView postProfile(@PathVariable("userId") Long userId,
                                     @RequestParam String textPost,

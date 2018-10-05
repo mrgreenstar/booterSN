@@ -18,7 +18,7 @@ public class UserSubscriptionsController {
     private UserRepository userRepository;
 
     @GetMapping("/subs")
-    public ModelAndView page(Principal principal, ModelAndView model) {
+    public ModelAndView subsPage(Principal principal, ModelAndView model) {
         User usr = userRepository.findUserByEmail(principal.getName());
         Set<Subscriptions> subs = usr.getSubscriptions();
         List<User> userSubs = new ArrayList<>();

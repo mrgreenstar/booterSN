@@ -10,12 +10,10 @@
 <body>
     <div th:fragment="NavigationBar">
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd">
-            <a class="navbar-brand" th:href="@{'/user_'+${ownerId}}">My profile</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav mr-auto">
+                    <li><a class="nav-item nav-link" th:href="@{/settings}">My profile</a></li>
+                    <li><a class="nav-item nav-link" th:href="@{'/user_' + ${ownerId}}">My news</a></li>
                     <li><a class="nav-item nav-link" th:href="@{/subs}">My subscriptions</a></li>
                     <li><a class="nav-item nav-link" href="#">My messages</a></li>
                 </ul>
