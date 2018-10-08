@@ -14,30 +14,56 @@
     <div th:replace="fragments/NavigationBar :: NavigationBar"></div>
     <div class="container">
         <form th:action="@{/settings}" method="post">
-            <div class="row">
-                <div lass="col-md-6">
+            <div class="row spaceBetweenRows">
+                <div class="col-md-2">
+                    <p class="text-info">First name:</p>
+                </div>
+                <div class="col-md-6">
                     <input type="text" name="firstName" th:value="${firstName}" placeholder="First name" required/>
                 </div>
             </div>
-            <div class="row">
-                <div lass="col-md-6">
+            <div class="row spaceBetweenRows">
+                <div class="col-md-2">
+                    <p class="text-info">Last name:</p>
+                </div>
+                <div class="col-md-6">
                     <input type="text" name="lastName" th:value="${lastName}" placeholder="Last name" required/>
                 </div>
             </div>
-            <div class="row">
-                <div lass="col-md-6">
+            <div class="row spaceBetweenRows">
+                <div class="col-md-2">
+                    <p class="text-info">Country:</p>
+                </div>
+                <div class="col-md-6">
                     <input type="text" name="country" th:value="${country}" placeholder="Country" required/>
                 </div>
             </div>
-            <div class="row">
+            <div class="row spaceBetweenRows">
+                <div class="col-md-2">
+                    <p class="text-info">Email:</p>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" name="email" th:value="${email}" placeholder="Email" required/>
+                </div>
+            </div>
+            <div class="row spaceBetweenRows">
                 <div class="col-md-6">
                     <button class="btn btn-primary" type="submit">Save changes</button>
                 </div>
             </div>
         </form>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="text-info" th:text="${info}"></div>
+        <div th:if="${emailError}">
+            <div class="row spaceBetweenRows">
+                <div class="col-md-6">
+                    <div class="text-danger" th:text="${emailError}"></div>
+                </div>
+            </div>
+        </div>
+        <div th:unless="${emailError}">
+            <div class="row spaceBetweenRows">
+                <div class="col-md-6">
+                    <div class="text-info" th:text="${info}"></div>
+                </div>
             </div>
         </div>
     </div>
