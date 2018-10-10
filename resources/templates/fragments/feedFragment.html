@@ -44,6 +44,12 @@
                     <p th:text="${post.getTimeAsString()}"></p>
                     <a th:href="@{'/user_' + ${post.getUser().getId()}}" th:text="${post.getUser().getFullName()}"></a>
                     <p th:text="${post.getContent()}"></p>
+                    <form th:action="@{__${#httpServletRequest.requestURL}__}" method="post">
+                        <button class="btn btn-primary btn-sm" type="submit" name="likeButton"
+                                th:value="'like' + ${post.getId()}">Like</button>
+                        <button class="btn btn-danger btn-sm" type="submit" name="dislikeButton"
+                                th:value="'dislike' + ${post.getId()}">Dislike</button>
+                    </form>
                 </div>
             </div>
         </th:block>

@@ -4,6 +4,8 @@ import com.mrgreenstar.sn.Entity.Post;
 import com.mrgreenstar.sn.Entity.Subscriptions;
 import com.mrgreenstar.sn.Entity.User;
 import com.mrgreenstar.sn.repositories.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,9 @@ import java.util.*;
 
 @Controller
 public class FeedController {
+
+    private static Logger logger = LoggerFactory.getLogger(FeedController.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -66,7 +71,7 @@ public class FeedController {
         model.setViewName("redirect:/user_" + userId);
         return model;
     }
-    // Контроллер, отвечающий за оформление ОТписок
+    // Controller for unsubscribe function
     @PostMapping(value = "/user_{userId}", params = {"unsubscribe"})
     public ModelAndView unsubProfile(@PathVariable("userId") Long userId, Principal principal,
                                      ModelAndView model) {
@@ -87,6 +92,17 @@ public class FeedController {
         pst.setUser(owner);
         postRepository.save(pst);
         model.setViewName("redirect:/user_" + Long.toString(owner.getId()));
+        return model;
+    }
+
+    @PostMapping(value = "/user_{userId}")
+    public ModelAndView likePost(@PathVariable("userId") Long userId,
+                                 @RequestParam(value = "likeButton", required = false) String likeButton,
+                                 @RequestParam(value = "dislikeButton", required = false) String dislikeButton,
+                                 ModelAndView model) {
+        if (likeButton != null) logger.info(likeButton);
+        if (dislikeButton != null) logger.info(dislikeButton);
+        model.setViewName("redirect:/user_" + Long.toString(userId));
         return model;
     }
 }
